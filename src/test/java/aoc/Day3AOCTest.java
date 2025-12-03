@@ -1,5 +1,6 @@
 package aoc;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,11 +16,17 @@ class Day3AOCTest {
 
     private static final int NUM_BATTERIES = 12;
     private static final char ZERO_CHAR = '0';
+    private List<String> bankValues;
+
+    @BeforeEach
+    void setup() throws IOException {
+        bankValues = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/test/resources/input3.txt"))
+                .stream().toList();
+
+    }
 
     @Test
-    void batteries_one() throws IOException {
-        List<String> bankValues = Files.readAllLines(
-                Paths.get(System.getProperty("user.dir") + "/src/test/resources/input3.txt")).stream().toList();
+    void batteries_one() {
         long totalJoltage = 0;
 
         // First approach
@@ -35,8 +42,7 @@ class Day3AOCTest {
     }
 
     @Test
-    void batteries_two() throws IOException {
-        List<String> bankValues = Files.readAllLines(Paths.get(System.getProperty("user.dir") + "/src/test/resources/input3.txt")).stream().toList();
+    void batteries_two() {
         long totalJoltage = Battery.calculate(bankValues, NUM_BATTERIES);
         IO.println(totalJoltage);
         assertEquals(173685428989126L, totalJoltage);
@@ -45,7 +51,8 @@ class Day3AOCTest {
 
     private static class Battery {
 
-        private Battery() {}
+        private Battery() {
+        }
 
         private static int calculateLooped(String bank) {
             int maxJoltage = 0;
@@ -61,8 +68,8 @@ class Day3AOCTest {
             return maxJoltage;
         }
 
-        private static long calculate(List<String> bankValues, int quantity)  {
-           return  bankValues.stream()
+        private static long calculate(List<String> bankValues, int quantity) {
+            return bankValues.stream()
                     .map(String::toCharArray)
                     .map(Battery::convertToIntArray)
                     .mapToLong(batteryValue -> Battery.getMaxJoltage(batteryValue, quantity))
